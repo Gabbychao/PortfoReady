@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -13,10 +13,86 @@ import {
   DialogTitle,
   Stack,
   Button,
+  IconButton,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
+
 
 const StudentProfile = () => {
+  const { user, isLoading } = useAuth();
+  const [userDetails, setUserDetails] = useState();
+  const [studentDetails, setStudentDetails] = useState();
+
+  const fetchUserDetails = async () => {
+    await axios
+      .get(`http://localhost:8080/user/getUser?userId=${user.userId}`)
+      .then((response) => {
+        setUserDetails(response.data.data);
+      })
+      .catch((error) => {
+        console.log("Fetching UserDetails Error: ", error);
+      });
+    await axios
+      .get(
+        `http://localhost:8080/student/getStudentByUserId?userId=${user.userId}`
+      )
+      .then((response) => {
+        setStudentDetails(response.data.data);
+      })
+      .catch((error) => {
+        console.log("Fetching Student Details Error: ", error);
+      });
+  };
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      
+      fetchUserDetails();
+    }
+  }, [isLoading, user]);
+
+  if (!userDetails || !studentDetails) {
+    return "...";
+  }
+
+  const handleAddCertificate = async (file) => {
+    try {
+      const formDataForImage = new FormData();
+      formDataForImage.append("file", file);
+      formDataForImage.append("userId", user.userId);
+      formDataForImage.append("name", "");
+      const image = await axios.post(
+        "http://localhost:8080/certificate/addCertificate",
+        formDataForImage,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (image.status === 200) {
+        fetchUserDetails()
+        console.log("Certificate uploaded successfully!");
+      }
+    } catch (error) {
+      console.error("Error adding Certificate", error.message);
+    }
+  };
+
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
   return (
     <>
       <Box display="flex" justifyContent="center">
@@ -40,15 +116,11 @@ const StudentProfile = () => {
               rowGap={2}
             >
               <Avatar
-                alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
+                src={`http://localhost:8080/user/${user.userId}/image`}
                 sx={{ width: 60, height: 60 }}
               />
               <Typography variant="h5" fontWeight="bold">
-                Student Name
-              </Typography>
-              <Typography variant="h6" fontWeight="bold">
-                Front-End Developer
+                {userDetails.firstName} {userDetails.lastName}
               </Typography>
             </Box>
             {/* Left-Side */}
@@ -62,57 +134,98 @@ const StudentProfile = () => {
                 Skills
               </Typography>
               <Typography variant="h6" fontSize="17px">
-                Front-End Development, Graphic Design
+                {studentDetails.skills}
               </Typography>
               <br />
               <Typography variant="h6" fontWeight="bold">
                 Education
               </Typography>
               <Typography variant="h6" fontSize="17px">
-                Cebu Institute of Technology
+                {studentDetails.education}
               </Typography>
               <br />
               <Typography variant="h6" fontWeight="bold">
                 Email
               </Typography>
               <Typography variant="h6" fontSize="17px">
-                John.Doe@gmail.com
+                {userDetails.email}
               </Typography>
               <br />
-              <ButtonStyled>Edit Profile</ButtonStyled>
+              <ButtonStyled component={Link} to="/editstudent">
+                Edit Profile
+              </ButtonStyled>
             </Box>
           </BoxStyled>
           {/* Certificates */}
-          <BoxStyled display="flex">
-            <Box width="370px" display="flex">
-              <Typography variant="h5" fontWeight="bold" padding="15px">
-                Certificates
-              </Typography>
+          <BoxStyled display="flex" flexDirection="column">
+            <Box height="70px" width="810px" display="flex" alignItems="center">
+              <Box display="flex" justifyContent="center" width="200px">
+                <Typography variant="h5" fontWeight="bold">
+                  Certificates
+                </Typography>
+              </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="end"
+                width="580px"
+              >
+                <Button
+                  component="label"
+                  color="primary"
+                  variant="contained"
+                  startIcon={<AddCircleIcon />}
+                  sx={{
+                    backgroundColor: "white",
+                    color: "#27374D",
+                    "&:hover": { backgroundColor: "#142132", color: "white" },
+                    borderRadius: "20px",
+                    border: ".1px solid #27374D",
+                    display: "flex",
+                    width: 170,
+                    whiteSpace: "nowrap",
+                    fontSize: "10",
+                  }}
+                >
+                  Add Certificate
+                  <VisuallyHiddenInput
+                    accept="image/*"
+                    onChange={(e) => handleAddCertificate(e.target.files[0])}
+                    name="certificates"
+                    type="file"
+                  />
+                </Button>
+              </Box>
             </Box>
             <Box
-              width="405px"
               display="flex"
-              justifyContent="end"
-              paddingTop="15px"
+              width="790px"
+              height="200px"
+              columnGap={10}
+              paddingLeft="20px"
+              sx={{overflowX: "scroll" }}
             >
-              <AddCircleIcon />
+              {studentDetails.certificates.map((certificate) => (
+                <Box key={certificate.id} width="150px" height="200px">
+                  <img
+                    style={{ maxWidth: "200px", maxHeight: "200px" }}
+                    src={`http://localhost:8080/certificate/getCertificate?id=${certificate.id}`}
+                    alt=""
+                  />
+                </Box>
+              ))}
             </Box>
           </BoxStyled>
           {/* Experiences */}
-          <BoxStyled display="flex">
-            <Box width="370px" display="flex">
+          <BoxStyled display="flex" flexDirection="column">
+            <Box display="flex" padding="15px">
               <Typography variant="h5" fontWeight="bold" padding="15px">
                 Experiences
               </Typography>
             </Box>
-            <Box
-              width="405px"
-              display="flex"
-              justifyContent="end"
-              paddingTop="15px"
-            >
-              <AddCircleIcon />
-            </Box>
+            <Typography sx={{ paddingLeft: "20px" }} variant="p">
+              {studentDetails.experiences}
+            </Typography>
           </BoxStyled>
         </Box>
         {/* Right Container */}
@@ -159,7 +272,13 @@ const StudentProfile = () => {
             <Typography fontWeight="bold" variant="h6">
               Resume
             </Typography>
-            <ButtonStyled>Download</ButtonStyled>
+            <ButtonStyled
+              component={Link}
+              to={`http://localhost:8080/student/getResume/${user.id}`}
+              download
+            >
+              View Resume
+            </ButtonStyled>
           </SmallBoxStyled>
           {/* Resume */}
           <SmallBoxStyled
@@ -172,13 +291,7 @@ const StudentProfile = () => {
               Contact Info
             </Typography>
             <Typography>
-              <LinkStlyed>Facebook.com/profile </LinkStlyed>
-            </Typography>
-            <Typography>
-              <LinkStlyed>Twitter.com/profile</LinkStlyed>
-            </Typography>
-            <Typography>
-              <LinkStlyed>Email.com/profile</LinkStlyed>
+              <LinkStlyed>{userDetails.links}</LinkStlyed>
             </Typography>
           </SmallBoxStyled>
         </Box>
@@ -186,7 +299,6 @@ const StudentProfile = () => {
     </>
   );
 };
-
 
 const AssessmentCard = () => {
   const [openAssessment, setOpenAssessment] = React.useState(false);

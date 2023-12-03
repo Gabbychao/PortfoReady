@@ -1,297 +1,284 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import {
   Box,
-  styled,
-  Avatar,
-  Typography,
-  FormControl,
-  OutlinedInput,
-  FormLabel,
-  Dialog,
+  Button,
   DialogContent,
   DialogTitle,
+  Typography,
+  styled,
+  Dialog,
+  CardHeader,
+  Avatar,
   Stack,
-  Button,
+  CardContent,
 } from "@mui/material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { PostCard } from "../Home/Home";
+import { JobPost } from "../Home/Home";
+import useAuth from "../../hooks/useAuth";
 
-const StudentProfile = () => {
+const EmployerProfile = () => {
+  const [posts, setPosts] = useState([]);
+  const { user, isLoading } = useAuth();
+  const [userDetails, setUserDetails] = useState();
+  const [employerDetails, setEmployerDetails] = useState();
+
+  const getPosts = async () => {
+    await axios
+      .get(`http://localhost:8080/post/posts?userId=${user.userId}`)
+      .then((response) => {
+        setPosts(response.data.data.content);
+        console.log(response);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      getPosts();
+      const fetchUserDetails = async () => {
+        await axios
+          .get(`http://localhost:8080/user/getUser?userId=${user.userId}`)
+          .then((response) => {
+            setUserDetails(response.data.data);
+          })
+          .catch((error) => {
+            console.log("Fetching UserDetails Error: ", error);
+          });
+        await axios
+          .get(
+            `http://localhost:8080/employer/getEmployerByUserId?userId=${user.id}`
+          )
+          .then((response) => {
+            setEmployerDetails(response.data.data);
+          })
+          .catch((error) => {
+            console.log("Fetching EmployerDetails Error: ", error);
+          });
+      };
+      fetchUserDetails();
+    }
+  }, [isLoading, user]);
+
+  if (!userDetails || !employerDetails) {
+    return "...";
+  }
+
   return (
     <>
-      <Box display="flex" justifyContent="center">
-        {/* Left-Container */}
-        <Box
-          marginTop="60px"
-          marginRight="30px"
-          display="flex"
-          flexDirection="column"
-          rowGap={4.5}
-        >
-          {/* Profile Details */}
-          <BoxStyled display="flex">
-            {/* Right-Side */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          verflowY: "auto",
+          marginTop: "70px",
+          marginLeft: "200px",
+        }}
+      >
+        {/* Company Profile */}
+        <Box width="1500px" display="flex" flexDirection="column" rowGap="40px">
+          <Box display="flex">
             <Box
-              width="400px"
+              width="812px"
+              height="302px"
+              borderRadius="15px"
+              border="2px solid #000000"
+              marginRight="40px"
               display="flex"
-              justifyContent="center"
-              flexDirection="column"
-              alignItems="center"
-              rowGap={2}
             >
-              <Avatar
-                alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
-                sx={{ width: 60, height: 60 }}
-              />
-              <Typography variant="h5" fontWeight="bold">
-                Student Name
-              </Typography>
-              <Typography variant="h6" fontWeight="bold">
-                Front-End Developer
-              </Typography>
+              {/* Profile Details */}
+              <Box width="400px" display="flex" justifyContent="center">
+                <Box
+                  sx={{
+                    width: "400px",
+                    height: "302px",
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    paddingTop: "20px",
+                  }}
+                >
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        src={`http://localhost:8080/user/${user.userId}/image`}
+                        sx={{ width: 70, height: 70, marginTop: "35px" }}
+                      ></Avatar>
+                    }
+                  />
+                  <CardContent sx={{ textAlign: "center" }}>
+                    {
+                      <Typography variant="h4">
+                        {userDetails.firstName} {userDetails.lastName}
+                      </Typography>
+                    }
+                  </CardContent>
+                </Box>
+              </Box>
+              <Box
+                width="400px"
+                display="flex"
+                flexDirection="column"
+                rowGap="10px"
+                textAlign="start"
+                paddingLeft="20px"
+                paddingTop="20px"
+              >
+                <Typography variant="h5" fontWeight="bold">
+                  About Us
+                </Typography>
+                <Typography
+                  variant="p"
+                  paddingBottom="15px"
+                  sx={{ wordBreak: "break-word" }}
+                >
+                  {employerDetails.companyDescription}
+                </Typography>
+                <Typography variant="h5" fontWeight="bold">
+                  Employer Email
+                </Typography>
+                <Typography variant="p" paddingBottom="10px">
+                  {userDetails.email}
+                </Typography>
+                <Button
+                  component={Link}
+                  to="/editemployer"
+                  sx={{
+                    maxWidth: "200px",
+                    height: "27px",
+                    borderRadius: "15px",
+                    border: "3px solid #20A4E6",
+                    color: "#20A4E6",
+                    textTransform: "none",
+                  }}
+                >
+                  <Typography variant="p">Edit Profile</Typography>
+                </Button>
+              </Box>
             </Box>
-            {/* Left-Side */}
-            <Box
-              display="flex"
-              justifyContent="start"
-              flexDirection="column"
-              marginTop="20px"
-            >
-              <Typography variant="h6" fontWeight="bold">
-                Skills
-              </Typography>
-              <Typography variant="h6" fontSize="17px">
-                Front-End Development, Graphic Design
-              </Typography>
-              <br />
-              <Typography variant="h6" fontWeight="bold">
-                Education
-              </Typography>
-              <Typography variant="h6" fontSize="17px">
-                Cebu Institute of Technology
-              </Typography>
-              <br />
-              <Typography variant="h6" fontWeight="bold">
-                Email
-              </Typography>
-              <Typography variant="h6" fontSize="17px">
-                John.Doe@gmail.com
-              </Typography>
-              <br />
-              <ButtonStyled>Edit Profile</ButtonStyled>
+
+            {/* Application Status */}
+            <Box display="flex" flexDirection="column" rowGap={5}>
+              <Box
+                borderRadius="15px"
+                border="2px solid #000000"
+                width="320px"
+                height="128px"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="column"
+              >
+                <Typography variant="h6" fontWeight="bold">
+                  Number of Applicants
+                </Typography>
+                <Typography variant="h5" fontWeight="bold" color="#FF0404">
+                  2
+                </Typography>
+                <ApplicantsCard id={user.id} />
+              </Box>
+              <Box
+                borderRadius="15px"
+                border="2px solid #000000"
+                width="320px"
+                height="128px"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="column"
+              >
+                <Typography variant="h6" fontWeight="bold">
+                  Company Name
+                </Typography>
+                <Typography variant="p" paddingBottom="10px">
+                  {employerDetails.companyName}
+                </Typography>
+                <Typography variant="h6" fontWeight="bold">
+                  Company Email
+                </Typography>
+                <Typography variant="p" paddingBottom="10px">
+                  {employerDetails.companyEmail}
+                </Typography>
+              </Box>
             </Box>
-          </BoxStyled>
-          {/* Certificates */}
-          <BoxStyled display="flex">
-            <Box width="370px" display="flex">
-              <Typography variant="h5" fontWeight="bold" padding="15px">
-                Certificates
-              </Typography>
-            </Box>
-            <Box
-              width="405px"
-              display="flex"
-              justifyContent="end"
-              paddingTop="15px"
-            >
-              <AddCircleIcon />
-            </Box>
-          </BoxStyled>
-          {/* Experiences */}
-          <BoxStyled display="flex">
-            <Box width="370px" display="flex">
-              <Typography variant="h5" fontWeight="bold" padding="15px">
-                Experiences
-              </Typography>
-            </Box>
-            <Box
-              width="405px"
-              display="flex"
-              justifyContent="end"
-              paddingTop="15px"
-            >
-              <AddCircleIcon />
-            </Box>
-          </BoxStyled>
-        </Box>
-        {/* Right Container */}
-        <Box
-          display="flex"
-          flexDirection="column"
-          rowGap={4.5}
-          marginTop="60px"
-        >
-          {/* Assessment */}
-          <SmallBoxStyled
+          </Box>
+
+          <Box
+            borderRadius="15px"
+            border="2px solid #000000"
+            width="1300px"
+            height="164px"
             display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            rowGap="20px"
-          >
-            <Typography fontWeight="bold" variant="h6">
-              Take Assessment Now
-            </Typography>
-            <AssessmentCard />
-          </SmallBoxStyled>
-          {/* Applicaitons */}
-          <SmallBoxStyled
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            rowGap="20px"
-          >
-            <Typography fontWeight="bold" variant="h6">
-              Applications
-            </Typography>
-            <ApplicationCard />
-          </SmallBoxStyled>
-          {/* Contact Info */}
-          <SmallBoxStyled
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            rowGap="20px"
-          >
-            <Typography fontWeight="bold" variant="h6">
-              Resume
-            </Typography>
-            <ButtonStyled>Download</ButtonStyled>
-          </SmallBoxStyled>
-          {/* Resume */}
-          <SmallBoxStyled
-            display="flex"
-            flexDirection="column"
             justifyContent="center"
             alignItems="center"
           >
-            <Typography fontWeight="bold" variant="h6">
-              Contact Info
-            </Typography>
-            <Typography>
-              <LinkStlyed>Facebook.com/profile </LinkStlyed>
-            </Typography>
-            <Typography>
-              <LinkStlyed>Twitter.com/profile</LinkStlyed>
-            </Typography>
-            <Typography>
-              <LinkStlyed>Email.com/profile</LinkStlyed>
-            </Typography>
-          </SmallBoxStyled>
+            <PostCard getPosts={getPosts} />
+          </Box>
+          <Box display="flex" flexDirection="column" rowGap={5}>
+            {posts.map((post) => (
+              <JobPost post={post} getPosts={getPosts} key={post.id} />
+            ))}
+          </Box>
         </Box>
       </Box>
     </>
   );
 };
 
+const ApplicantsCard = ({ id }) => {
+  const [openApplicants, SetOpenApplicants] = React.useState(false);
+  const handleOpenApplicant = () => SetOpenApplicants(true);
+  const handleCloseApplicant = () => SetOpenApplicants(false);
+  const [appliedPosts, setAppliedPosts] = useState();
 
-const AssessmentCard = () => {
-  const [openAssessment, setOpenAssessment] = React.useState(false);
-  const handleOpenAssessment = () => setOpenAssessment(true);
-  const handleCloseAssessment = () => setOpenAssessment(false);
+  // useEffect(() => {
+  //   const fetchAppliedPosts = async () => {
+  //     await axios
+  //       .get(
+  //         `http://localhost:8080/application/getApplicants?postId=${id}`
+  //       )
+  //       .then((response) => {
+  //         setAppliedPosts(response.data.data);
+  //       })
+  //       .catch((error) => {
+  //         console.log("Fetching Applied Posts Error: ", error);
+  //       });
+  //   };
+  //   fetchAppliedPosts();
+  // });
 
   return (
     <>
-      <ButtonStyled onClick={handleOpenAssessment}>Answer</ButtonStyled>
+      <Button
+        onClick={handleOpenApplicant}
+        sx={{
+          width: "150px",
+          height: "27px",
+          borderRadius: "15px",
+          border: "3px solid #20A4E6",
+          color: "#000000",
+          textTransform: "none",
+        }}
+      >
+        <Typography variant="p" color="#20A4E6">
+          View Applicants
+        </Typography>
+      </Button>
       <Dialog
         fullWidth
         maxWidth="md"
-        open={openAssessment}
-        onClose={handleCloseAssessment}
+        open={openApplicants}
+        onClose={handleCloseApplicant}
       >
-        <DialogTitle textAlign="center" borderBottom="2px solid #808080">
-          <Typography
-            variant="h6"
-            component="h2"
-            sx={{
-              fontSize: "32px",
-              fontWeight: "bold",
-            }}
-          >
-            Assesment
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Box padding="20px">
-            <FormControl
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                rowGap: "10px",
-              }}
-            >
-              <FormLabelStyled>
-                1. How long have you been working as a Front End Developer?
-              </FormLabelStyled>
-              <OutlinedInputStyled onFocus="none" />
-              <FormLabelStyled>
-                2. Do you have any experience when it comes to solving real
-                world problems in the IT Field?
-              </FormLabelStyled>
-              <OutlinedInputStyled onFocus="none" />
-              <FormLabelStyled>
-                3. Do you have any experience when it comes to solving real
-                world problems in the IT Field?
-              </FormLabelStyled>
-              <OutlinedInputStyled onFocus="none" />
-              <FormLabelStyled>
-                4. How long have you been working as a Front End Developer?
-              </FormLabelStyled>
-              <OutlinedInputStyled onFocus="none" />
-              <FormLabelStyled>
-                5. How long have you been working as a Front End Developer?
-              </FormLabelStyled>
-              <OutlinedInputStyled onFocus="none" />
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="end"
-                paddingTop="15px"
-              >
-                <Button
-                  sx={{
-                    width: "160px",
-                    height: "40px",
-                    borderRadius: "20px",
-                    backgroundColor: "#000000",
-                    color: "#FFFFFF",
-                    textTransform: "none",
-                    "&:hover": { backgroundColor: "#000000" },
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold">
-                    Submit
-                  </Typography>
-                </Button>
-              </Box>
-            </FormControl>
-          </Box>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
-
-const ApplicationCard = () => {
-  const [openApplication, setOpenApplication] = React.useState(false);
-  const handleOpenApplication = () => setOpenApplication(true);
-  const handleCloseApplication = () => setOpenApplication(false);
-  return (
-    <>
-      <ButtonStyled onClick={handleOpenApplication}>View</ButtonStyled>
-      <Dialog
-        fullWidth
-        maxWidth="md"
-        open={openApplication}
-        onClose={handleCloseApplication}
-      >
-        <DialogTitle textAlign="center" borderBottom="2px solid #808080">
-          <Typography variant="h4" fontWeight="bold">
-            My Applications
-          </Typography>
+        <DialogTitle
+          textAlign="center"
+          borderBottom="2px solid #808080"
+          fontSize="30px"
+          fontWeight="bold"
+        >
+          Applicants
         </DialogTitle>
         <DialogContent>
           <Stack
@@ -310,62 +297,26 @@ const ApplicationCard = () => {
               paddingLeft="30px"
             >
               <Stack direction="row" columnGap="180px" alignItems="center">
-                <Typography variant="h4" fontWeight="bold">
-                  Application for Pixel Perfect
-                </Typography>
-                <Box textAlign="center">
-                  <Typography variant="h6" fontWeight="bold">
-                    Status
-                  </Typography>
-                  <Typography color="#00f700" variant="h5" fontWeight="bold">
-                    Accepted
+                <Box width="400px">
+                  <Typography variant="h4" fontWeight="bold">
+                    John Palo
                   </Typography>
                 </Box>
-              </Stack>
-            </Box>
-            <Box
-              width="800px"
-              height="126px"
-              border="2px solid #808080"
-              borderRadius="20px"
-              display="flex"
-              alignItems="center"
-              paddingLeft="30px"
-            >
-              <Stack direction="row" columnGap="180px" alignItems="center">
-                <Typography variant="h4" fontWeight="bold">
-                  Application for Pixel Perfect
-                </Typography>
                 <Box textAlign="center">
-                  <Typography variant="h6" fontWeight="bold">
-                    Status
-                  </Typography>
-                  <Typography color="#FF0000" variant="h5" fontWeight="bold">
-                    Rejected
-                  </Typography>
-                </Box>
-              </Stack>
-            </Box>
-            <Box
-              width="800px"
-              height="126px"
-              border="2px solid #808080"
-              borderRadius="20px"
-              display="flex"
-              alignItems="center"
-              paddingLeft="30px"
-            >
-              <Stack direction="row" columnGap="180px" alignItems="center">
-                <Typography variant="h4" fontWeight="bold">
-                  Application for Pixel Perfect
-                </Typography>
-                <Box textAlign="center">
-                  <Typography variant="h6" fontWeight="bold">
-                    Status
-                  </Typography>
-                  <Typography color="#c8c8c8" variant="h5" fontWeight="bold">
-                    Pending
-                  </Typography>
+                  <Button
+                    sx={{
+                      width: "190px",
+                      height: "42px",
+                      backgroundColor: "#000000",
+                      color: "#FFFFFF",
+                      borderRadius: "20px",
+                      "&:hover": { backgroundColor: "#000000" },
+                    }}
+                  >
+                    <Typography fontWeight="bold">
+                      <LinkStyled to="applicants">View</LinkStyled>
+                    </Typography>
+                  </Button>
                 </Box>
               </Stack>
             </Box>
@@ -376,43 +327,13 @@ const ApplicationCard = () => {
   );
 };
 
-const OutlinedInputStyled = styled(OutlinedInput)({
-  width: "800px",
-  height: "55px",
-  borderRadius: "20px",
-});
-
-const FormLabelStyled = styled(FormLabel)({
-  fontsize: "20px",
-  fontWeight: "bold",
-});
-
-const LinkStlyed = styled(Link)({
-  color: "#20A4E6",
-});
-
-const BoxStyled = styled(Box)({
-  width: "810px",
-  height: "300px",
-  border: "2px solid #000000",
-  borderRadius: "10px",
-});
-
-const SmallBoxStyled = styled(Box)({
-  width: "320px",
-  height: "130px",
-  border: "2px solid #000000",
-  borderRadius: "15px",
-});
-
-const ButtonStyled = styled(Button)({
-  width: "130px",
-  textAlign: "center",
-  height: "30px",
-  borderRadius: "15px",
-  border: "3px solid #20A4E6",
-  color: "#20A4E6",
+const LinkStyled = styled(Link)({
+  width: "210px",
+  height: "40px",
+  backgroundColor: "#000000",
+  color: "#FFFFFF",
+  textDecoration: "none",
   textTransform: "none",
 });
 
-export default StudentProfile;
+export default EmployerProfile;
