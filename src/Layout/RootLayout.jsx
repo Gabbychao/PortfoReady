@@ -17,7 +17,13 @@ const settings = ["Profile", "Logout"];
 const RootLayout = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const [searchBarDialogOpen, setSearchBarDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const { user, onLogout, isLoading } = useAuth();
+  const navigate = useNavigate();
+  
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
