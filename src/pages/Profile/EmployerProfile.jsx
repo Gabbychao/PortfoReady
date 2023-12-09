@@ -326,7 +326,6 @@ const ApplicantsCard = ({ id }) => {
     </>
   );
 };
-//checked
 const LinkStyled = styled(Link)({
   width: "210px",
   height: "40px",
