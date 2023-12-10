@@ -141,5 +141,9 @@ const InputStyled = styled(Input)({
   paddingLeft: "10px",
 });
 
+const LinkStyled = styled(Link)({
+  color: "#000000",
+  paddingLeft: "10px",
+});
 
 export default ContactForm;
