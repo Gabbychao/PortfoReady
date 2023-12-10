@@ -143,7 +143,7 @@ import {
       </Box>
     );
   };
-  
+
   const JobContainer = styled(Box)({
     width: "500px",
     height: "100px",
