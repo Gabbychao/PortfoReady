@@ -152,4 +152,3 @@ import {
   });
   
   export default JobList;
-  
