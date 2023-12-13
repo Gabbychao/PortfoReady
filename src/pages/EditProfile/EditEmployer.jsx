@@ -37,7 +37,25 @@ const EditEmployer = () => {
       .catch((err) => console.log(err));
   };
 
-  
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      getPosts();
+      const fetchUserDetails = async () => {
+        await axios
+          .get(`http://localhost:8080/user/getUser?userId=${user.id}`)
+          .then((response) => {
+            setUserDetails(response.data.data);
+          })
+          .catch((error) => {
+            console.log("Fetching UserDetails Error: ", error);
+          });
+      };
+      fetchUserDetails();
+    }
+  }, [isLoading, user]);
+
+
     return (
       <>
         {/* Header */}
