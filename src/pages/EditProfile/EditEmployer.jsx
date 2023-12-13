@@ -56,6 +56,10 @@ const EditEmployer = () => {
   }, [isLoading, user]);
 
 
+  if (!userDetails) {
+    return "...";
+  }
+
     return (
       <>
         {/* Header */}
