@@ -1,17 +1,22 @@
 import {
-    Box,
-    Typography,
-    Avatar,
-    Button,
-    styled,
-    FormControl,
-    FormLabel,
-    TextField,
-    Tabs,
-    Tab,
-  } from "@mui/material";
-  import { useState } from "react";
-  import logo from "../../assets/portfoready-logo.png";
+  Box,
+  Typography,
+  Avatar,
+  Button,
+  FormControl,
+  FormLabel,
+  TextField,
+  Tabs,
+  Tab,
+  Input,
+} from "@mui/material";
+import { useState, useEffect } from "react";
+import logo from "../../assets/portfoready-logo.png";
+import { styled } from "@mui/material/styles";
+import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternate";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
   
   const EditEmployer = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
