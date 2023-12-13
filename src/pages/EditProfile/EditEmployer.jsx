@@ -18,11 +18,14 @@ import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
   
-  const EditEmployer = () => {
-    const [currentTabIndex, setCurrentTabIndex] = useState(0);
-    const handleTabChange = (e, tabIndex) => {
-      setCurrentTabIndex(tabIndex);
-    };
+const EditEmployer = () => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  const { user, isLoading } = useAuth();
+  const [userDetails, setUserDetails] = useState();
+
+  const handleTabChange = (e, tabIndex) => {
+    setCurrentTabIndex(tabIndex);
+  };
     return (
       <>
         {/* Header */}
