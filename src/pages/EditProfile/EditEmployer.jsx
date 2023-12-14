@@ -406,6 +406,13 @@ const EditUserProfile = ({ userDetails }) => {
     </>
   );
 };
+
+const EditEmployerProfile = () => {
+  const [companyNameValue, setCompanyNameValue] = useState("");
+  const [companyEmailValue, setCompanyEmailValue] = useState("");
+  const [companyDescriptionValue, setCompanyDescriptionValue] = useState("");
+  const { user, isLoading, onLogout } = useAuth();
+}
   
   const ButtonStyled = styled(Button)({
     width: "190px",
