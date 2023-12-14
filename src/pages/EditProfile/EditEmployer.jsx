@@ -219,6 +219,23 @@ const EditUserProfile = ({ userDetails }) => {
   };
 
 
+  const handleSave = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to save the changes?"
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      updateUser();
+      handleAddProfile();
+      onLogout();
+    } catch (error) {
+      console.error("Error Update Profile", error.message);
+    }
+  };
+
+
     return (
       <>
         <Box
