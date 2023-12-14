@@ -444,6 +444,10 @@ const EditEmployerProfile = () => {
     }
   };
 
+  if (isLoading) {
+    return "...";
+  }
+
 }
   
   const ButtonStyled = styled(Button)({
