@@ -176,6 +176,16 @@ const EditUserProfile = ({ userDetails }) => {
     width: 1,
   });
 
+  const getPosts = async () => {
+    await axios
+      .get(`http://localhost:8080/post/posts?userId=${user.userId}`)
+      .then((response) => {
+        setPosts(response.data.data.content);
+        console.log(response);
+      })
+      .catch((err) => console.log(err));
+  };
+
 
     return (
       <>
