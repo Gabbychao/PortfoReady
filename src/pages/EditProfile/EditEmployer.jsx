@@ -412,6 +412,23 @@ const EditEmployerProfile = () => {
   const [companyEmailValue, setCompanyEmailValue] = useState("");
   const [companyDescriptionValue, setCompanyDescriptionValue] = useState("");
   const { user, isLoading, onLogout } = useAuth();
+
+
+  const updateCompanyProfile = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/employer/updateEmployer?userId=${user.id}`,
+        {
+          companyName: companyNameValue,
+          companyEmail: companyEmailValue,
+          companyDescription: companyDescriptionValue,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating Employer Profile");
+    }
+  };
 }
   
   const ButtonStyled = styled(Button)({
