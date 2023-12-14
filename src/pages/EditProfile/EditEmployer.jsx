@@ -237,156 +237,152 @@ const EditUserProfile = ({ userDetails }) => {
 
 
     return (
-      <>
+    <>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        columnGap={2}
+      >
         <Box
           display="flex"
-          flexDirection="column"
           justifyContent="center"
           alignItems="center"
           columnGap={2}
         >
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            columnGap={2}
+          <Avatar
+            src={
+              images
+                ? URL.createObjectURL(images)
+                : `http://localhost:8080/user/${user.userId}/image`
+            }
+            sx={{ height: "70px", width: "70px" }}
+          ></Avatar>
+          <Button
+            component="label"
+            color="primary"
+            variant="contained"
+            startIcon={<AddPhotoIcon />}
+            sx={{
+              backgroundColor: "white",
+              color: "#27374D",
+              "&:hover": { backgroundColor: "#142132", color: "white" },
+              borderRadius: "20px",
+              border: ".1px solid #27374D",
+              display: "flex",
+              width: 150,
+              whiteSpace: "nowrap",
+              fontSize: "10",
+            }}
           >
-            <Avatar sx={{ height: "70px", width: "70px" }} aria-label="recipe">
-              B
-            </Avatar>
-            <ButtonStyled>
-              <Typography>Upload New Picture</Typography>
-            </ButtonStyled>
-            <ButtonStyled sx={{ width: "120px" }}>
-              <Typography>Delete</Typography>
-            </ButtonStyled>
+            add photo
+            <VisuallyHiddenInput
+              name="images"
+              type="file"
+              onChange={(e) => setImages(e.target.files[0])}
+            />
+          </Button>
+        </Box>
+        <br />
+        <Box sx={{ width: "600px", height: "525px", display: "flex" }}>
+          <Box width="200px" display="flex" flexDirection="column" rowGap={6}>
+            <Typography fontWeight="bold" variant="h5" marginTop="10px">
+              Name:
+            </Typography>
+            <Typography fontWeight="bold" variant="h5">
+              Username:
+            </Typography>
+            <Typography fontWeight="bold" variant="h5">
+              Email:
+            </Typography>
+            <Typography fontWeight="bold" variant="h5">
+              Password:
+            </Typography>
+            <Typography fontWeight="bold" variant="h5">
+              Phone Number:
+            </Typography>
           </Box>
-          <br />
-          <FormControl>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="start"
-              rowGap={3}
-            >
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <FormLabelStyled sx={{ paddingRight: "95px" }}>
-                  Name:
-                </FormLabelStyled>
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{
-                    width: "205px",
-                    "& fieldset": { border: "none" },
-                    paddingRight: "15px",
-                  }}
-                />
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{ width: "205px", "& fieldset": { border: "none" } }}
-                />
-              </Box>
-              <Box display="flex" alignItems="center">
-                <FormLabelStyled sx={{ paddingRight: "50px" }}>
-                  Username:
-                </FormLabelStyled>
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{ width: "425px", "& fieldset": { border: "none" } }}
-                />
-              </Box>
-              <Box display="flex" alignItems="center">
-                <FormLabelStyled sx={{ paddingRight: "93px" }}>
-                  Email:
-                </FormLabelStyled>
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{ width: "425px", "& fieldset": { border: "none" } }}
-                />
-              </Box>
-              <Box display="flex" alignItems="center">
-                <FormLabelStyled sx={{ paddingRight: "56px" }}>
-                  Password:
-                </FormLabelStyled>
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{ width: "425px", "& fieldset": { border: "none" } }}
-                />
-              </Box>
-              <Box display="flex" alignItems="center">
-                <FormLabelStyled sx={{ paddingRight: "10px" }}>
-                  Phone Number:
-                </FormLabelStyled>
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{ width: "425px", "& fieldset": { border: "none" } }}
-                />
-              </Box>
-              <Box display="flex" alignItems="center">
-                <FormLabelStyled sx={{ paddingRight: "20px" }}>
-                  Contact Links:
-                </FormLabelStyled>
-                <TextField
-                  InputProps={{
-                    sx: {
-                      borderRadius: 20,
-                      height: "39px",
-                      border: "1px solid #000000",
-                    },
-                  }}
-                  sx={{ width: "425px", "& fieldset": { border: "none" } }}
-                />
-              </Box>
+          <Box width="400px" display="flex" flexDirection="column" rowGap={3}>
+            <Box height="50px" display="flex">
+              <TextFeidStyled
+                value={firstNameValue}
+                onChange={(e) => setFirstNameValue(e.target.value)}
+                placeholder="First Name"
+                size="medium"
+                sx={{ marginRight: "20px" }}
+                InputProps={{
+                  style: {
+                    borderRadius: "20px",
+                  },
+                }}
+              />
+              <TextFeidStyled
+                value={lastNameValue}
+                onChange={(e) => setLastNameValue(e.target.value)}
+                placeholder="Last Name"
+                size="medium"
+                InputProps={{
+                  style: {
+                    borderRadius: "20px",
+                  },
+                }}
+              />
             </Box>
-            <Box marginTop="20px" display="flex" justifyContent="space-between">
+            <TextFeidStyled
+              value={usernameValue}
+              onChange={(e) => setUsernameValue(e.target.value)}
+              placeholder="e.g. John123"
+              InputProps={{
+                style: {
+                  borderRadius: "20px",
+                },
+              }}
+            />
+            <TextFeidStyled
+              value={emailvalue}
+              onChange={(e) => setEmailValue(e.target.value)}
+              placeholder="e.g. JohnDoe@email.com"
+              InputProps={{
+                style: {
+                  borderRadius: "20px",
+                },
+              }}
+            />
+            <TextFeidStyled
+              value={passwordvalue}
+              onChange={(e) => setPassowrdValue(e.target.value)}
+              placeholder="*******"
+              InputProps={{
+                style: {
+                  borderRadius: "20px",
+                },
+              }}
+            />
+            <TextFeidStyled
+              value={phoneNumbervalue}
+              onChange={(e) => setPhoneNumberValue(e.target.value)}
+              placeholder="e.g. +63342345312"
+              InputProps={{
+                style: {
+                  borderRadius: "20px",
+                },
+              }}
+            />
+            <Box marginTop="10px" display="flex">
               <Button
+                component={Link}
+                to="/employerprofile"
+                onClick={handleSave}
                 sx={{
+                  border: "1px solid #000000",
                   width: "200px",
                   height: "43px",
                   borderRadius: "20px",
                   backgroundColor: "#000000",
                   color: "#FFFFFF",
                   textTransform: "none",
+                  marginRight: "30px",
                 }}
               >
                 <Typography>Save</Typography>
@@ -396,112 +392,20 @@ const EditUserProfile = ({ userDetails }) => {
                   width: "200px",
                   height: "43px",
                   borderRadius: "20px",
-                  backgroundColor: "#000000",
-                  color: "#FFFFFF",
+                  border: "1px solid #000000",
+                  color: "#000000",
                   textTransform: "none",
                 }}
               >
                 <Typography>Cancel</Typography>
               </Button>
             </Box>
-          </FormControl>
-        </Box>
-      </>
-    );
-  };
-  
-  const EditStudentProfile = () => {
-    return (
-      <>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          columnGap={2}
-        >
-          <Avatar sx={{ height: "70px", width: "70px" }} aria-label="recipe">
-            B
-          </Avatar>
-          <ButtonStyled>
-            <Typography>Upload New Picture</Typography>
-          </ButtonStyled>
-          <ButtonStyled sx={{ width: "120px" }}>
-            <Typography>Delete</Typography>
-          </ButtonStyled>
-        </Box>
-        <FormControl>
-          <FormLabelStyled>Company Name:</FormLabelStyled>
-          <TextField
-            InputProps={{
-              sx: {
-                borderRadius: 20,
-                height: "39px",
-                border: "1px solid #000000",
-              },
-            }}
-            sx={{ width: "425px", "& fieldset": { border: "none" } }}
-          />
-          <br />
-          <FormLabelStyled>Company Email:</FormLabelStyled>
-          <TextField
-            InputProps={{
-              sx: {
-                borderRadius: 20,
-                height: "39px",
-                border: "1px solid #000000",
-              },
-            }}
-            sx={{ width: "425px", "& fieldset": { border: "none" } }}
-          />
-          <br />
-          <FormLabelStyled>Company Description:</FormLabelStyled>
-          <TextField
-            variant="outlined"
-            multiline
-            onFocus="none"
-            rows={4}
-            maxRows={5}
-            InputProps={{
-              sx: {
-                borderRadius: 4,
-                width: "390px",
-                border: "1px solid #000000",
-                width: "425px",
-                "& fieldset": { border: "none" },
-              },
-            }}
-          />
-          <br />
-          <Box marginTop="20px" display="flex" justifyContent="space-between">
-            <Button
-              sx={{
-                width: "200px",
-                height: "43px",
-                borderRadius: "20px",
-                backgroundColor: "#000000",
-                color: "#FFFFFF",
-                textTransform: "none",
-              }}
-            >
-              <Typography>Save</Typography>
-            </Button>
-            <Button
-              sx={{
-                width: "200px",
-                height: "43px",
-                borderRadius: "20px",
-                backgroundColor: "#000000",
-                color: "#FFFFFF",
-                textTransform: "none",
-              }}
-            >
-              <Typography>Cancel</Typography>
-            </Button>
           </Box>
-        </FormControl>
-      </>
-    );
-  };
+        </Box>
+      </Box>
+    </>
+  );
+};
   
   const ButtonStyled = styled(Button)({
     width: "190px",
