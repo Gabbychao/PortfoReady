@@ -194,6 +194,31 @@ const EditUserProfile = ({ userDetails }) => {
   }, [isLoading, user]);
 
 
+
+  const handleAddProfile = async () => {
+    try {
+      const formDataForImage = new FormData();
+      formDataForImage.append("file", images);
+      const image = await axios.put(
+        `http://localhost:8080/user/uploadImage/${user.userId}`,
+        formDataForImage,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (image.status === 200) {
+        console.log("Image uploaded successfully!");
+      } else {
+        console.error("Error uploading image:", image.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding profile picture", error.message);
+    }
+  };
+
+
     return (
       <>
         <Box
