@@ -128,7 +128,13 @@ const EditEmployer = () => {
   );
 };
   
-  const EditUserProfile = () => {
+const EditUserProfile = ({ userDetails }) => {
+  const { user, isLoading, onLogout } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [images, setImages] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
+
     return (
       <>
         <Box
