@@ -135,6 +135,17 @@ const EditUserProfile = ({ userDetails }) => {
   const [imageFile, setImageFile] = useState(null);
 
 
+  const [firstNameValue, setFirstNameValue] = useState("");
+  const [lastNameValue, setLastNameValue] = useState("");
+  const [usernameValue, setUsernameValue] = useState("");
+  const [emailvalue, setEmailValue] = useState("");
+  const [passwordvalue, setPassowrdValue] = useState("");
+  const [phoneNumbervalue, setPhoneNumberValue] = useState("");
+
+
+  
+
+
     return (
       <>
         <Box
