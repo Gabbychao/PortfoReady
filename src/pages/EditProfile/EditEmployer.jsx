@@ -429,6 +429,21 @@ const EditEmployerProfile = () => {
       console.error("Error updating Employer Profile");
     }
   };
+
+  const handleSave = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to save the changes?"
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      updateCompanyProfile();
+    } catch (error) {
+      console.error("Error Updating Profile", error.message);
+    }
+  };
+
 }
   
   const ButtonStyled = styled(Button)({
