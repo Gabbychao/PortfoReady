@@ -448,7 +448,87 @@ const EditEmployerProfile = () => {
     return "...";
   }
 
-}
+
+  return (
+    <>
+      <FormControl>
+        <FormLabelStyled>Company Name:</FormLabelStyled>
+        <TextField
+          value={companyNameValue}
+          onChange={(e) => setCompanyNameValue(e.target.value)}
+          InputProps={{
+            sx: {
+              borderRadius: 20,
+              height: "39px",
+              border: "1px solid #000000",
+            },
+          }}
+          sx={{ width: "425px", "& fieldset": { border: "none" } }}
+        />
+        <br />
+        <FormLabelStyled>Company Email:</FormLabelStyled>
+        <TextField
+          value={companyEmailValue}
+          onChange={(e) => setCompanyEmailValue(e.target.value)}
+          InputProps={{
+            sx: {
+              borderRadius: 20,
+              height: "39px",
+              border: "1px solid #000000",
+            },
+          }}
+          sx={{ width: "425px", "& fieldset": { border: "none" } }}
+        />
+        <br />
+        <FormLabelStyled>Company Description:</FormLabelStyled>
+        <textarea
+          value={companyDescriptionValue}
+          onChange={(e) => setCompanyDescriptionValue(e.target.value)}
+          style={{
+            padding: "20px",
+            fontSize: "15px",
+            height: "130px",
+            resize: "none",
+            borderRadius: "20px",
+            border: "1px solid #000000",
+          }}
+        />
+        <br />
+        <Box marginTop="20px" display="flex" justifyContent="space-between">
+          <Button
+            component={Link}
+            to="/employerprofile"
+            onClick={handleSave}
+            sx={{
+              width: "200px",
+              height: "43px",
+              borderRadius: "20px",
+              backgroundColor: "#000000",
+              color: "#FFFFFF",
+              textTransform: "none",
+            }}
+          >
+            <Typography>Save</Typography>
+          </Button>
+          <Button
+            component={Link}
+            to="employerprofile"
+            sx={{
+              width: "200px",
+              height: "43px",
+              borderRadius: "20px",
+              border: "1px solid #000000",
+              color: "#000000",
+              textTransform: "none",
+            }}
+          >
+            <Typography>Cancel</Typography>
+          </Button>
+        </Box>
+      </FormControl>
+    </>
+  );
+};
   
   const ButtonStyled = styled(Button)({
     width: "190px",
