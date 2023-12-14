@@ -143,7 +143,26 @@ const EditUserProfile = ({ userDetails }) => {
   const [phoneNumbervalue, setPhoneNumberValue] = useState("");
 
 
-  
+  const updateUser = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/user/updateUser/${user.userId}`,
+        {
+          firstName: firstNameValue.length > 0 ? firstNameValue : userDetails.firstName,
+          lastName: lastNameValue.length > 0 ? lastNameValue : userDetails.lastName,
+          username: usernameValue.length > 0 ? usernameValue : userDetails.username,
+          email: emailvalue.length > 0 ? email : userDetails.email,
+          password: passwordvalue.length > 0 ? passwordvalue : userDetails.password,
+          phoneNumber: phoneNumbervalue.length > 0 ? phoneNumbervalue : userDetails.phoneNumber,
+        }
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
 
 
     return (
