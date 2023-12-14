@@ -187,6 +187,13 @@ const EditUserProfile = ({ userDetails }) => {
   };
 
 
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      getPosts();
+    }
+  }, [isLoading, user]);
+
+
     return (
       <>
         <Box
