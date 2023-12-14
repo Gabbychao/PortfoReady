@@ -530,19 +530,23 @@ const EditEmployerProfile = () => {
   );
 };
   
-  const ButtonStyled = styled(Button)({
-    width: "190px",
-    height: "38px",
-    borderRadius: "20px",
-    border: "1px solid #000000",
-    color: "#000000",
-    textTransform: "none",
-  });
-  
-  const FormLabelStyled = styled(FormLabel)({
-    fontSize: "20px",
-    fontWeight: "bold",
-    color: "#000000",
-  });
+const TextFeidStyled = styled(TextField)({
+  width: "400px",
+});
+
+const ButtonStyled = styled(Button)({
+  width: "190px",
+  height: "38px",
+  borderRadius: "20px",
+  border: "1px solid #000000",
+  color: "#000000",
+  textTransform: "none",
+});
+
+const FormLabelStyled = styled(FormLabel)({
+  fontSize: "20px",
+  fontWeight: "bold",
+  color: "#000000",
+});
   
   export default EditEmployer;
