@@ -18,11 +18,11 @@ import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
   
-  const EditStudent = () => {
-    const [currentTabIndex, setCurrentTabIndex] = useState(0);
-    const handleTabChange = (e, tabIndex) => {
-      setCurrentTabIndex(tabIndex);
-    };
+const EditStudent = () => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  const handleTabChange = (e, tabIndex) => {
+    setCurrentTabIndex(tabIndex);
+  };
   
     return (
       <>
