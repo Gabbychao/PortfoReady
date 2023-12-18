@@ -23,6 +23,29 @@ const EditStudent = () => {
   const handleTabChange = (e, tabIndex) => {
     setCurrentTabIndex(tabIndex);
   };
+
+  const { user, isLoading } = useAuth();
+  const [userDetails, setUserDetails] = useState();
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      const fetchUserDetails = async () => {
+        await axios
+          .get(`http://localhost:8080/user/getUser?userId=${user.userId}`)
+          .then((response) => {
+            setUserDetails(response.data.data);
+          })
+          .catch((error) => {
+            console.log("Fetching UserDetails Error: ", error);
+          });
+      };
+      fetchUserDetails();
+    }
+  }, [isLoading, user]);
+
+  if (!userDetails) {
+    return "...";
+  }
   
     return (
       <>
