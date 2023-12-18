@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import ContactForm from "./pages/ContactForm/ContactForm";
-import RootLayout from "./Layout/RootLayout.jsx";
+import RootLayout from "./Layout/RootLayout";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material/styles";
 import StudentProfile from "./pages/Profile/StudentProfile";
@@ -19,6 +19,8 @@ import JobList from "./pages/JobList/JobList";
 import EditStudent from "./pages/EditProfile/EditStudent";
 import EditEmployer from "./pages/EditProfile/EditEmployer";
 import { AuthProvider } from "./hooks/useAuth";
+import axios from "axios";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -26,12 +28,8 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        path: "/home",
+        index: true,
         element: <Home />,
-      },
-      {
-        path: "/contact",
-        element: <ContactForm />,
       },
       {
         path: "/studentprofile",
@@ -46,7 +44,7 @@ const router = createBrowserRouter([
         element: <Applicants />,
       },
       {
-        path: "/jobpage",
+        path: "/jobpage/:postId",
         element: <JobPage />,
       },
       {
@@ -66,6 +64,14 @@ const router = createBrowserRouter([
   {
     path: "/landingpage",
     element: <LandingPage />,
+  },
+  {
+    path:"/dashboard",
+    element:<Dashboard/>
+  },
+  {
+    path: "/contact",
+    element: <ContactForm />,
   },
   {
     path: "/login",
@@ -89,12 +95,18 @@ const theme = createTheme({
   },
 });
 
+axios.defaults.headers = {
+  "Cache-Control": "no-cache",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
