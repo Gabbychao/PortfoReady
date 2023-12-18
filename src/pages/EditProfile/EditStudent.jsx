@@ -115,6 +115,18 @@ const EditStudent = () => {
 };
   
   const EditUserProfile = () => {
+
+    const { user, isLoading, onLogout } = useAuth();
+    const [images, setImages] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+
+    const [firstNameValue, setFirstNameValue] = useState("");
+    const [lastNameValue, setLastNameValue] = useState("");
+    const [usernameValue, setUsernameValue] = useState("");
+    const [emailvalue, setEmailValue] = useState("");
+    const [passwordvalue, setPassowrdValue] = useState("");
+    const [phoneNumbervalue, setPhoneNumberValue] = useState("");
+    const [contactLinksValue, setContactLinksValue] = useState("");
     return (
       <>
         <Box
