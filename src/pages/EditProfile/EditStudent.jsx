@@ -47,72 +47,72 @@ const EditStudent = () => {
     return "...";
   }
   
-    return (
-      <>
-        {/* Header */}
+  return (
+    <>
+      {/* Header */}
+      <Box
+        height="100px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Box
+          width="100px"
           height="100px"
+          sx={{
+            backgroundImage: `url(${logo})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        ></Box>
+        <Typography variant="h4" fontWeight="bold">
+          Edit Student Profile
+        </Typography>
+      </Box>
+      {/* Name Text */}
+      <Box marginLeft="400px" marginTop="50px">
+        <Typography variant="h4" fontWeight="bold">
+        {`${userDetails.firstName} ${userDetails.lastName}`} /Student Profile
+        </Typography>
+      </Box>
+      <Box marginTop="50px" display="flex">
+        {/* Left-Side */}
+        <Box
           display="flex"
-          justifyContent="center"
-          alignItems="center"
+          flexDirection="column"
+          alignItems="end"
+          paddingRight="50px"
+          textAlign="justify"
+          width="600px"
+          height="560px"
+          marginTop="50px"
+          sx={{ borderRight: "2px solid #000000" }}
         >
-          <Box
-            width="100px"
-            height="100px"
-            sx={{
-              backgroundImage: `url(${logo})`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-            }}
-          ></Box>
-          <Typography variant="h4" fontWeight="bold">
-            Edit Student Profile
-          </Typography>
-        </Box>
-        {/* Name Text */}
-        <Box marginLeft="400px" marginTop="50px">
-          <Typography variant="h4" fontWeight="bold">
-            John Doe/Student Profile
-          </Typography>
-        </Box>
-        <Box marginTop="50px" display="flex">
-          {/* Left-Side */}
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="end"
-            paddingRight="50px"
-            textAlign="justify"
-            width="600px"
-            height="560px"
-            marginTop="50px"
-            sx={{ borderRight: "2px solid #000000" }}
+          <Tabs
+            value={currentTabIndex}
+            orientation="vertical"
+            onChange={handleTabChange}
           >
-            <Tabs
-              value={currentTabIndex}
-              orientation="vertical"
-              onChange={handleTabChange}
-            >
-              <Tab label="Edit User" />
-              <Tab label="Edit Student Profile" />
-            </Tabs>
-          </Box>
-          {/* Right- Side */}
-          <Box
-            width="800px"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            rowGap={1}
-          >
-            {currentTabIndex === 0 && <EditUserProfile />}
-            {currentTabIndex === 1 && <EditStudentProfile />}
-          </Box>
+            <Tab label="Edit User" />
+            <Tab label="Edit Student Profile" />
+          </Tabs>
         </Box>
-      </>
-    );
-  };
+        {/* Right- Side */}
+        <Box
+          width="800px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          rowGap={1}
+        >
+          {currentTabIndex === 0 && <EditUserProfile userDetails={userDetails} />}
+          {currentTabIndex === 1 && <EditStudentProfile />}
+        </Box>
+      </Box>
+    </>
+  );
+};
   
   const EditUserProfile = () => {
     return (
