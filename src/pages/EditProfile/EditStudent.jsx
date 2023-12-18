@@ -151,6 +151,51 @@ const EditStudent = () => {
       }
     };
 
+    const VisuallyHiddenInput = styled("input")({
+      clip: "rect(0 0 0 0)",
+      clipPath: "inset(50%)",
+      height: 1,
+      overflow: "hidden",
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      whiteSpace: "nowrap",
+      width: 1,
+    });
+  
+    const handleAddProfile = async () => {
+      try {
+        const formDataForImage = new FormData();
+        formDataForImage.append("file", images);
+        const image = await axios.put(
+          `http://localhost:8080/user/uploadImage/${user.userId}`,
+          formDataForImage,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (image.status === 200) {
+          console.log("Image uploaded successfully!");
+        } else {
+          console.error("Error uploading image:", image.statusText);
+        }
+      } catch (error) {
+        console.error("Error adding profile picture", error.message);
+      }
+    };
+  
+    const handleSave = async () => {
+      try {
+        updateUser();
+        handleAddProfile();
+        onLogout();
+      } catch (error) {
+        console.error("Error Update Profile", error.message);
+      }
+    };  
+
     return (
       <>
         <Box
